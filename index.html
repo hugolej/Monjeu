@@ -3,64 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARCANE LAB</title>
+    <title>ARCANE LAB | OFFICE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
        
-        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; }
+        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; --fond: rgba(15, 5, 25, 0.95); }
 
         body { 
-            margin: 0; padding: 0; 
-            background: #1a0a2a url('IMG_6777.png') no-repeat center center fixed; 
-            background-size: cover; 
-            font-family: 'Rajdhani', sans-serif; color: white; height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; background: #000 url('IMG_6777.png') no-repeat center center fixed; 
+            background-size: cover; font-family: 'Rajdhani', sans-serif; color: white; height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
         }
 
-        /* --- HEADER --- */
-        header { background: rgba(0,0,0,0.8); border-bottom: 2px solid var(--accent); display: flex; justify-content: space-around; padding: 10px; z-index: 10; }
+        /* --- EN-TÊTE --- */
+        header { background: rgba(0,0,0,0.85); border-bottom: 2px solid var(--accent); display: flex; justify-content: space-around; padding: 10px; z-index: 10; }
         .res-block { text-align: center; display: flex; flex-direction: column; align-items: center; width: 33%; }
-        
-        /* Correction pour les petites icônes du haut */
-        .res-icon { 
-            width: 24px; 
-            border-radius: 5px;
-            /* On zoom un peu pour ignorer les bords du quadrillage */
-            object-fit: cover;
-            filter: contrast(1.2) brightness(1.1);
-        }
-        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); margin-top: 2px; }
+        .res-icon { width: 22px; margin-bottom: 2px; filter: contrast(1.2); }
+        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); }
 
-        /* --- ZONE CENTRALE --- */
+        /* --- ZONE DE JEU --- */
         .game-scene { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
         
         .main-character {
             width: 260px;
+            position: absolute;
+            bottom: 15%;
             cursor: pointer;
             z-index: 5;
             animation: float 3s infinite ease-in-out;
-            
-            /* TECHNIQUE ANTI-QUADRILLAGE : On crée une forme arrondie pour masquer les coins blancs/gris */
-            -webkit-mask-image: radial-gradient(circle, black 60%, transparent 75%);
-            mask-image: radial-gradient(circle, black 60%, transparent 75%);
-            
-            /* On booste le contraste pour que le blanc devienne invisible avec multiply */
-            filter: contrast(1.4) brightness(1.1);
+            /* Correction du fond blanc/quadrillé */
             mix-blend-mode: multiply;
+            filter: contrast(1.4) brightness(1.1);
+            -webkit-mask-image: radial-gradient(circle, black 65%, transparent 75%);
+            mask-image: radial-gradient(circle, black 65%, transparent 75%);
         }
 
-        @keyframes float { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-15px); } 
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
         /* --- INTERFACE BAS --- */
-        .ui-bottom { background: rgba(15, 5, 25, 0.98); border-top: 3px solid var(--accent); padding: 15px; border-radius: 25px 25px 0 0; z-index: 20; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); }
-        .btn-main { width: 100%; padding: 16px; background: linear-gradient(to bottom, #ffcc00, #ffaa00); border: none; border-radius: 15px; font-family: 'Orbitron'; font-weight: bold; font-size: 1.1rem; color: #000; box-shadow: 0 4px 0 #996600; }
+        .ui-bottom { background: var(--fond); border-top: 3px solid var(--accent); padding: 15px; border-radius: 25px 25px 0 0; z-index: 20; }
+        .btn-main { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 1rem; cursor: pointer; color: #000; box-shadow: 0 4px 0 #996600; }
         .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #996600; }
         
-        nav { display: flex; justify-content: space-around; margin-top: 18px; }
-        .nav-btn { background: none; border: none; color: #fff; font-family: 'Orbitron'; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; opacity: 0.8; }
+        nav { display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
+        .nav-btn { background: none; border: none; color: #fff; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; opacity: 0.8; }
+        .nav-btn:hover { opacity: 1; color: var(--accent); }
+
+        /* --- SYSTÈME DE MENUS --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: #1a0a2a; border: 2px solid var(--accent); width: 88%; max-height: 75vh; padding: 20px; border-radius: 20px; position: relative; overflow-y: auto; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.8rem; color: var(--accent); cursor: pointer; }
+        
+        .menu-item { display: flex; align-items: center; background: rgba(255,255,255,0.05); margin-bottom: 12px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,204,0,0.3); }
+        .menu-img { width: 45px; margin-right: 15px; mix-blend-mode: multiply; background: white; border-radius: 5px; }
+        .menu-info { flex: 1; }
+        .menu-info b { display: block; color: var(--accent); }
+        .buy-btn { background: var(--accent); color: black; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-family: 'Orbitron'; font-size: 0.7rem; }
     </style>
 </head>
 <body>
@@ -76,21 +74,30 @@
 </div>
 
 <div class="ui-bottom">
-    <div style="text-align:center; margin-bottom:12px;">
-        <b style="color:var(--accent); letter-spacing: 1px;">CHAUDRON LVL <span id="lvl">1</span></b><br>
-        <small style="opacity:0.6;">Production : <span id="gps">0</span> or / sec</small>
+    <div style="text-align:center; margin-bottom:10px;">
+        <span style="color:var(--accent); font-weight:bold;">CHAUDRON LVL <span id="lvl">1</span></span>
+        <br><small style="opacity:0.7;">Production : <span id="gps">0</span> or / sec</small>
     </div>
     <button class="btn-main" onclick="buyUpgrade()">AMÉLIORER (<span id="cost">50</span> 💰)</button>
     
     <nav>
-        <div class="nav-btn">📜<br>RECRUTER</div>
-        <div class="nav-btn">📖<br>GRIMOIRE</div>
-        <div class="nav-btn">🏰<br>DONJON</div>
+        <button class="nav-btn" onclick="openMenu('recruter')">📜<br>RECRUTER</button>
+        <button class="nav-btn" onclick="openMenu('grimoire')">📖<br>GRIMOIRE</button>
+        <button class="nav-btn" onclick="openMenu('donjon')">🏰<br>DONJON</button>
     </nav>
 </div>
 
+<div class="overlay" id="menu-overlay">
+    <div class="modal">
+        <span class="close-modal" onclick="closeMenu()">&times;</span>
+        <h2 id="menu-title" style="text-align:center; color:var(--accent); font-family:Orbitron; margin-bottom:20px;">TITRE</h2>
+        <div id="menu-content"></div>
+    </div>
+</div>
+
 <script>
-    let gold = 0, crys = 0, magie = 0, lvl = 1, cost = 50, gps = 0;
+    // --- VARIABLES ---
+    let gold = 0, crys = 0, magie = 0, lvl = 1, cost = 50, gps = 0, apprentis = 0;
 
     function updateUI() {
         document.getElementById('gold-val').innerText = Math.floor(gold);
@@ -98,32 +105,79 @@
         document.getElementById('magie-val').innerText = Math.floor(magie);
         document.getElementById('lvl').innerText = lvl;
         document.getElementById('cost').innerText = cost;
-        document.getElementById('gps').innerText = gps.toFixed(1);
+        document.getElementById('gps').innerText = (gps + (apprentis * 5)).toFixed(1);
     }
 
     function doClick() {
         gold += lvl;
         magie += 0.2;
         updateUI();
-        // Petit effet de vibration au clic
-        document.querySelector('.main-character').style.transform = 'scale(0.9) translateY(-10px)';
-        setTimeout(() => {
-            document.querySelector('.main-character').style.transform = '';
-        }, 50);
     }
 
     function buyUpgrade() {
         if (gold >= cost) {
             gold -= cost;
             lvl++;
-            gps += 1.2;
-            cost = Math.floor(cost * 1.8);
+            gps += 2;
+            cost = Math.floor(cost * 1.7);
+            crys += 2;
             updateUI();
         }
     }
 
+    // --- MENUS ---
+    function openMenu(type) {
+        const title = document.getElementById('menu-title');
+        const content = document.getElementById('menu-content');
+        let html = "";
+
+        if(type === 'recruter') {
+            title.innerText = "RECRUTEMENT";
+            html = `
+                <div class="menu-item">
+                    <img src="sorcier_chaudron.png.png" class="menu-img">
+                    <div class="menu-info"><b>Apprenti Sorcier</b><small>+5 Or/sec</small></div>
+                    <button class="buy-btn" onclick="buyApprenti()">500 💰</button>
+                </div>`;
+        } else if(type === 'grimoire') {
+            title.innerText = "GRIMOIRE";
+            html = `
+                <div class="menu-item">
+                    <img src="potion.png.png" class="menu-img">
+                    <div class="menu-info"><b>Puissance Brute</b><small>+2 force de clic</small></div>
+                    <button class="buy-btn" onclick="buyMagic()">15 🔮</button>
+                </div>`;
+        } else if(type === 'donjon') {
+            title.innerText = "DONJON";
+            html = `
+                <div style="text-align:center;">
+                    <div style="background:#400; border:2px solid red; padding:15px; border-radius:10px; margin-bottom:15px;">
+                        <b style="color:red;">BOSS : DRAGON DE PIERRE</b><br>
+                        <small>Récompense : 50 Cristaux</small>
+                    </div>
+                    <button class="btn-main" style="background:red; color:white;" onclick="alert('Combat bientôt disponible !')">ATTAQUER !</button>
+                </div>`;
+        }
+
+        content.innerHTML = html;
+        document.getElementById('menu-overlay').style.display = 'flex';
+    }
+
+    function buyApprenti() {
+        if(gold >= 500) { gold -= 500; apprentis++; updateUI(); closeMenu(); } 
+        else { alert("Or insuffisant !"); }
+    }
+
+    function buyMagic() {
+        if(magie >= 15) { magie -= 15; lvl += 2; updateUI(); closeMenu(); } 
+        else { alert("Magie insuffisante !"); }
+    }
+
+    function closeMenu() { document.getElementById('menu-overlay').style.display = 'none'; }
+
+    // Revenus passifs (toutes les secondes)
     setInterval(() => {
-        gold += gps / 10;
+        gold += (gps + (apprentis * 5)) / 10;
         updateUI();
     }, 100);
 
@@ -131,3 +185,4 @@
 </script>
 </body>
 </html>
+

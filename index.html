@@ -3,131 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARCANE LAB | MEDIEVAL</title>
+    <title>ARCANE LAB | OFFICE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
        
-        :root {
-            --accent: #ffcc00; --magie: #bd00ff; --fond: rgba(20, 10, 30, 0.9);
-        }
+        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; --fond: rgba(15, 5, 25, 0.95); }
 
         body { 
-            margin: 0; padding: 0;
-            background: #000 url('IMG_6777.png') no-repeat center center fixed; 
-            background-size: cover;
-            font-family: 'Rajdhani', sans-serif;
-            color: white; height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; background: #000 url('IMG_6777.png') no-repeat center center fixed; 
+            background-size: cover; font-family: 'Rajdhani', sans-serif; color: white; height: 100vh; overflow: hidden;
             display: flex; flex-direction: column;
         }
 
-        /* --- HEADER : TES RESSOURCES --- */
-        header {
-            background: rgba(0,0,0,0.8); border-bottom: 2px solid var(--accent);
-            display: flex; justify-content: space-around; padding: 10px; z-index: 100;
-        }
-        .res-block { text-align: center; }
-        .res-val { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--accent); display: block; }
-        .res-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+        /* --- HEADER --- */
+        header { background: rgba(0,0,0,0.85); border-bottom: 2px solid var(--accent); display: flex; justify-content: space-around; padding: 10px; z-index: 10; }
+        .res-block { text-align: center; display: flex; flex-direction: column; align-items: center; width: 33%; }
+        .res-icon { width: 22px; margin-bottom: 2px; }
+        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); }
 
-        /* --- ZONE DE JEU : SORCIER + CHAUDRON --- */
-        .game-scene {
-            flex: 1; position: relative;
-            display: flex; justify-content: center; align-items: center;
-        }
-
-        /* LE SORCIER (Derrière) */
-        .sorcier-view {
-            width: 200px; height: 200px;
-            position: absolute; top: 20%;
-            background: url('IMG_6778.png') no-repeat;
-            background-size: 600px; /* On zoome sur la planche */
-            background-position: 0 0; /* Position du sorcier */
-            animation: float 3s infinite ease-in-out;
-            z-index: 1;
-        }
-
-        /* LE CHAUDRON (Devant) */
-        .chaudron-view {
-            width: 120px; height: 120px;
-            position: absolute; bottom: 25%;
-            background: url('IMG_6778.png') no-repeat;
-            background-size: 360px; /* On zoome différemment */
-            background-position: -120px 0; /* Position du chaudron sur ton image */
-            z-index: 2;
+        /* --- ZONE CENTRALE --- */
+        .game-scene { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
+        
+        .main-character {
+            width: 250px;
+            position: absolute;
+            bottom: 15%;
             cursor: pointer;
-            filter: drop-shadow(0 0 15px var(--magie));
+            animation: float 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 20px rgba(189, 0, 255, 0.5));
+            transition: transform 0.1s;
+            z-index: 5;
+        }
+        .main-character:active { transform: scale(0.95) translateY(0); }
+
+        @keyframes float { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-20px); } 
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
+        /* --- INTERFACE BAS --- */
+        .ui-bottom { background: var(--fond); border-top: 3px solid var(--accent); padding: 15px; border-radius: 25px 25px 0 0; z-index: 20; box-shadow: 0 -10px 20px rgba(0,0,0,0.5); }
+        .btn-main { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 1rem; cursor: pointer; color: #000; }
+        
+        nav { display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
+        .nav-btn { background: none; border: none; color: #fff; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; opacity: 0.8; }
+        .nav-btn:hover { opacity: 1; color: var(--accent); }
+        .nav-icon { font-size: 1.2rem; margin-bottom: 4px; }
 
-        /* --- FOOTER : ACTIONS & MENU --- */
-        .ui-bottom {
-            background: var(--fond); border-top: 3px solid var(--accent);
-            padding: 20px; border-radius: 20px 20px 0 0;
-        }
-
-        .btn-upgrade {
-            width: 100%; padding: 15px; background: var(--accent); color: black;
-            border: none; border-radius: 10px; font-family: 'Orbitron';
-            font-weight: bold; font-size: 1rem; cursor: pointer;
-        }
-
-        nav {
-            display: flex; justify-content: space-around; margin-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;
-        }
-        .nav-btn { background: none; border: none; color: #aaa; font-size: 0.7rem; cursor: pointer; font-family: 'Orbitron'; }
-        .nav-btn:hover { color: var(--accent); }
-
-        /* MODAL */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal { background: #1a0a2a; border: 2px solid var(--accent); width: 85%; padding: 20px; text-align: center; }
+        /* --- MODALES --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: #1a0a2a; border: 2px solid var(--accent); width: 88%; max-height: 75vh; padding: 20px; border-radius: 20px; position: relative; overflow-y: auto; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 1.8rem; color: var(--accent); cursor: pointer; font-family: sans-serif; }
+        
+        .menu-item { display: flex; align-items: center; background: rgba(255,255,255,0.05); margin-bottom: 12px; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,204,0,0.3); }
+        .menu-img { width: 45px; margin-right: 15px; border-radius: 8px; }
+        .menu-info { flex: 1; }
+        .menu-info b { display: block; color: var(--accent); font-size: 1rem; }
+        .menu-info small { color: #aaa; font-size: 0.8rem; }
+        .buy-btn { background: var(--accent); color: black; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-family: 'Orbitron'; font-size: 0.7rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="res-block"><span class="res-label">OR</span><span class="res-val" id="gold-val">0</span></div>
-    <div class="res-block"><span class="res-label">CRISTAUX</span><span class="res-val" id="crys-val" style="color:#00f2ff">0</span></div>
-    <div class="res-block"><span class="res-label">MAGIE</span><span class="res-val" id="magie-val" style="color:var(--magie)">0</span></div>
+    <div class="res-block"><img src="piece.png.png" class="res-icon"><span id="gold-val" class="res-val">0</span></div>
+    <div class="res-block"><img src="cristal.png.png" class="res-icon"><span id="crys-val" class="res-val" style="color:var(--cyan)">0</span></div>
+    <div class="res-block"><img src="potion.png.png" class="res-icon"><span id="magie-val" class="res-val" style="color:var(--magie)">0</span></div>
 </header>
 
 <div class="game-scene">
-    <div class="sorcier-view"></div>
-    <div class="chaudron-view" onclick="doClick()"></div>
+    <img src="sorcier_chaudron.png.png" class="main-character" onclick="doClick()">
 </div>
 
 <div class="ui-bottom">
     <div style="text-align:center; margin-bottom:10px;">
-        <span style="color:var(--accent)">CHAUDRON LVL <span id="lvl">1</span></span><br>
-        <small>Produit: <span id="gps">2</span> or/s</small>
+        <span style="color:var(--accent); font-weight:bold;">CHAUDRON LVL <span id="lvl">1</span></span>
+        <br><small style="opacity:0.7;">Production : <span id="gps">0</span> or / sec</small>
     </div>
-    <button class="btn-upgrade" onclick="buyUpgrade()">AMÉLIORER (<span id="cost">50</span> 💰)</button>
+    <button class="btn-main" onclick="buyUpgrade()">AMÉLIORER (<span id="cost">50</span> 💰)</button>
     
     <nav>
-        <button class="nav-btn" onclick="openUI('Recrutement')">RECRUTER</button>
-        <button class="nav-btn" onclick="openUI('Grimoire')">GRIMOIRE</button>
-        <button class="nav-btn" onclick="openUI('Donjon')">DONJON</button>
+        <button class="nav-btn" onclick="openMenu('recruter')"><span class="nav-icon">📜</span>RECRUTER</button>
+        <button class="nav-btn" onclick="openMenu('grimoire')"><span class="nav-icon">📖</span>GRIMOIRE</button>
+        <button class="nav-btn" onclick="openMenu('donjon')"><span class="nav-icon">🏰</span>DONJON</button>
     </nav>
 </div>
 
-<div class="overlay" id="overlay">
+<div class="overlay" id="menu-overlay">
     <div class="modal">
-        <h2 id="modal-title" style="color:var(--accent)">TITRE</h2>
-        <p>Contenu en cours de développement...</p>
-        <button class="btn-upgrade" onclick="closeUI()">RETOUR</button>
+        <span class="close-modal" onclick="closeMenu()">&times;</span>
+        <h2 id="menu-title" style="text-align:center; color:var(--accent); font-family:Orbitron; margin-bottom:20px;">TITRE</h2>
+        <div id="menu-content"></div>
     </div>
 </div>
 
 <script>
-    // État du jeu (Toutes tes fonctionnalités)
-    let state = {
-        gold: 0, crys: 0, magie: 0,
-        lvl: 1, cost: 50, gps: 2
-    };
+    let state = { gold: 0, crys: 0, magie: 0, lvl: 1, cost: 50, gps: 0, apprentis: 0 };
 
     function updateUI() {
         document.getElementById('gold-val').innerText = Math.floor(state.gold);
@@ -135,12 +106,12 @@
         document.getElementById('magie-val').innerText = Math.floor(state.magie);
         document.getElementById('lvl').innerText = state.lvl;
         document.getElementById('cost').innerText = state.cost;
-        document.getElementById('gps').innerText = state.gps;
+        document.getElementById('gps').innerText = (state.gps + (state.apprentis * 5)).toFixed(1);
     }
 
     function doClick() {
         state.gold += state.lvl;
-        state.magie += 0.1; // Cliquer produit un peu de magie
+        state.magie += 0.2;
         updateUI();
     }
 
@@ -148,31 +119,69 @@
         if (state.gold >= state.cost) {
             state.gold -= state.cost;
             state.lvl++;
-            state.gps += 2;
-            state.cost = Math.floor(state.cost * 1.6);
-            state.crys += 5; // On gagne des cristaux en montant de niveau
+            state.gps += 1.5;
+            state.cost = Math.floor(state.cost * 1.7);
+            state.crys += 2;
             updateUI();
         }
     }
 
-    function openUI(name) {
-        document.getElementById('modal-title').innerText = name;
-        document.getElementById('overlay').style.display = 'flex';
+    function openMenu(type) {
+        const title = document.getElementById('menu-title');
+        const content = document.getElementById('menu-content');
+        let html = "";
+
+        if(type === 'recruter') {
+            title.innerText = "RECRUTEMENT";
+            html = `
+                <div class="menu-item">
+                    <img src="sorcier_chaudron.png.png" class="menu-img">
+                    <div class="menu-info"><b>Apprenti</b><small>+5 Or/sec</small></div>
+                    <button class="buy-btn" onclick="buyApprenti()">500 💰</button>
+                </div>
+            `;
+        } else if(type === 'grimoire') {
+            title.innerText = "GRIMOIRE";
+            html = `
+                <div class="menu-item">
+                    <img src="potion.png.png" class="menu-img">
+                    <div class="menu-info"><b>Double Clic</b><small>Augmente la force</small></div>
+                    <button class="buy-btn" onclick="buyMagic()">10 🔮</button>
+                </div>
+            `;
+        } else if(type === 'donjon') {
+            title.innerText = "DONJON";
+            html = `
+                <div style="text-align:center; padding:10px;">
+                    <div style="background:red; height:15px; border-radius:10px; margin-bottom:10px; border:2px solid #fff;"></div>
+                    <b style="color:#ff4444;">BOSS : DRAGON NOIR</b><br>
+                    <small>PV: 500 / 500</small><br><br>
+                    <button class="btn-main" style="background:red; color:white;" onclick="alert('Combat en cours !')">ATTAQUER !</button>
+                </div>
+            `;
+        }
+        content.innerHTML = html;
+        document.getElementById('menu-overlay').style.display = 'flex';
     }
 
-    function closeUI() {
-        document.getElementById('overlay').style.display = 'none';
+    function buyApprenti() {
+        if(state.gold >= 500) { state.gold -= 500; state.apprentis++; updateUI(); closeMenu(); }
+        else { alert("Pas assez d'or !"); }
     }
 
-    // Gain automatique (Or et Magie)
+    function buyMagic() {
+        if(state.magie >= 10) { state.magie -= 10; state.lvl += 2; updateUI(); closeMenu(); }
+        else { alert("Pas assez de magie !"); }
+    }
+
+    function closeMenu() { document.getElementById('menu-overlay').style.display = 'none'; }
+
     setInterval(() => {
-        state.gold += state.gps / 10;
-        state.magie += (state.lvl * 0.05);
+        state.gold += (state.gps + (state.apprentis * 5)) / 10;
         updateUI();
     }, 100);
 
     window.onload = updateUI;
 </script>
-
 </body>
 </html>

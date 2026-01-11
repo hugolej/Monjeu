@@ -5,118 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SORCIER TYCOON</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
-        
         body { 
             margin: 0; 
-            background: url('fond.png') no-repeat center center fixed; 
+            /* ICI : On a mis .png pour le fond */
+            background: #2d1b42 url('fond.png') no-repeat center center fixed; 
             background-size: cover;
-            font-family: 'Fredoka', sans-serif;
+            font-family: sans-serif;
             color: white;
-        }
-
-        /* --- STYLE IDLE MINER --- */
-        header {
-            background: rgba(45, 27, 66, 0.9);
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-            border-bottom: 4px solid #ffcc00;
-        }
-
-        .gold-display {
-            background: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            border: 2px solid #ffcc00;
-            color: #ffcc00;
-            font-size: 1.2rem;
-        }
-
-        main {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-bottom: 100px;
-        }
-
-        .chaudron-card {
-            background: rgba(61, 42, 82, 0.85);
-            border-radius: 25px;
-            padding: 15px;
-            border: 4px solid #5a3d7a;
             text-align: center;
-            box-shadow: 0 8px 0 #1a0f26;
+            overflow: hidden;
         }
 
-        /* L'IMAGE DU SORCIER CHIBI */
-        .sorcier-img {
-            width: 120px;
-            height: 120px;
+        .gold-counter {
+            background: rgba(0,0,0,0.8);
+            padding: 15px;
+            font-size: 28px;
+            color: #ffcc00;
+            border-bottom: 4px solid #ffcc00;
+            font-weight: bold;
+        }
+
+        .character-container {
+            margin-top: 10vh;
+        }
+
+        /* ICI : On a mis .png pour le personnage */
+        .character {
+            width: 250px;
+            height: 250px;
             background: url('assets.png') no-repeat center;
             background-size: contain;
             margin: 0 auto;
-            animation: levitation 2s infinite ease-in-out;
+            animation: bounce 2s infinite ease-in-out;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
         }
 
-        @keyframes levitation {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-25px) scale(1.05); }
         }
 
-        .btn-up {
+        button {
             background: #4CAF50;
-            border: none;
-            padding: 15px;
-            width: 100%;
-            border-radius: 15px;
             color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 22px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 8px #2e7d32;
             font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 5px 0 #2e7d32;
-            cursor: pointer;
+            active: transform: translateY(4px);
         }
 
-        .btn-up:active { transform: translateY(3px); box-shadow: 0 2px 0 #2e7d32; }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px #2e7d32;
+        }
     </style>
 </head>
 <body>
-
-<header>
-    <div class="gold-display">💰 <span id="gold">0</span></div>
-</header>
-
-<main id="game">
-    </main>
-
-<script>
-    let gold = 1000;
+    <div class="gold-counter">💰 OR: <span id="gold">0</span></div>
     
-    function update() {
-        document.getElementById('gold').innerText = Math.floor(gold);
-        const game = document.getElementById('game');
-        game.innerHTML = `
-            <div class="chaudron-card">
-                <div class="sorcier-img"></div>
-                <h2>Chaudron Magique</h2>
-                <p>Production: +50/s</p>
-                <button class="btn-up" onclick="addGold()">AMÉLIORER</button>
-            </div>
-        `;
-    }
+    <div class="character-container">
+        <div class="character"></div>
+        <h2 style="text-shadow: 2px 2px 10px black;">Apprenti Sorcier</h2>
+        <button onclick="clickGold()">TAPPORE L'OR !</button>
+    </div>
 
-    function addGold() {
-        gold += 100;
-        update();
-    }
-
-    // Gain auto
-    setInterval(() => {
-        gold += 5;
-        update();
-    }, 1000);
-
-    update();
-</script>
-</body
+    <script>
+        let or = 0;
+        function clickGold() {
+            or += 10;
+            document.getElementById('gold').innerText = or;
+            
+            // Petit effet de vibration quand on clique
+            navigator.vibrate(50); 
+        }
+    </script>
+</body>
+</html>

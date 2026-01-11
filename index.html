@@ -2,128 +2,126 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SORCIER TYCOON</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Sorcier Tycoon</title>
     <style>
-        /* CSS : Le look de ton jeu */
         body { 
             margin: 0; 
             background: #1a0f26 url('IMG_6777.png') no-repeat center center fixed; 
             background-size: cover;
-            font-family: sans-serif;
+            font-family: 'Arial', sans-serif;
             color: white;
             text-align: center;
             height: 100vh;
-            overflow: hidden;
-        }
-
-        .top-bar {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-            font-size: 1.4rem;
-            border-bottom: 3px solid #ffcc00;
-        }
-
-        .game-area {
-            height: 50vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .sorcier {
-            width: 250px;
-            height: 250px;
-            background: url('IMG_6778.png') no-repeat center;
-            background-size: contain;
+        /* Barre du haut style App */
+        .header {
+            background: rgba(0,0,0,0.6);
+            padding: 20px;
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .game-main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+        /* ZOOM SUR LE SORCIER UNIQUEMENT */
+        .sorcier-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            overflow: hidden; /* Cache le reste de la planche */
+            position: relative;
+        }
+        
+        .sorcier-img {
+            width: 240px; /* On double la taille pour zoomer */
+            position: absolute;
+            top: 0; left: 0; /* On cale sur le premier perso */
             cursor: pointer;
-            animation: levitation 3s infinite ease-in-out;
         }
 
-        @keyframes levitation {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .sorcier-img:active { transform: scale(0.9); }
+
+        /* Interface de bas d'écran */
+        .footer {
+            background: #2a1b3d;
+            padding: 30px;
+            border-top: 4px solid #ffcc00;
+            border-radius: 30px 30px 0 0;
         }
 
-        .upgrade-section {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding: 25px 0;
-            background: rgba(0,0,0,0.85);
-            border-top: 3px solid #ffcc00;
-        }
-
-        .btn-upgrade {
-            background: #4CAF50;
+        .btn-boost {
+            background: #76b947;
             color: white;
-            padding: 15px 40px;
             border: none;
-            border-radius: 12px;
+            padding: 15px 50px;
+            border-radius: 15px;
+            font-size: 1.3rem;
             font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 4px #2e7d32;
+            box-shadow: 0 5px #4d7a2e;
+            width: 80%;
         }
 
-        .cost-text { margin-bottom: 8px; color: #ffcc00; }
+        .btn-boost:active { transform: translateY(3px); box-shadow: 0 2px #4d7a2e; }
+        
+        .stats-text { margin-bottom: 10px; font-size: 1.1rem; color: #aaa; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div>💰 OR: <span id="gold">0</span></div>
-        <div>⚡ <span id="gps">0</span>/s</div>
+    <div class="header">
+        <div>💰 <span id="gold">0</span></div>
+        <div>⚡ <span id="gps">0.0</span>/s</div>
     </div>
 
-    <div class="game-area">
-        <div class="sorcier" onclick="clickSorcier()"></div>
-        <h2 id="lvl-text">SORCIER (LVL 1)</h2>
+    <div class="game-main">
+        <div class="sorcier-container" onclick="doClick()">
+            <img src="IMG_6778.png" class="sorcier-img" id="char">
+        </div>
+        <h2 id="lvl-label">SORCIER LVL 1</h2>
     </div>
 
-    <div class="upgrade-section">
-        <div class="cost-text">Amélioration : <span id="cost">50</span> 💰</div>
-        <button class="btn-upgrade" id="upBtn" onclick="buyUpgrade()">BOOSTER !</button>
+    <div class="footer">
+        <div class="stats-text">Améliorer : <span id="cost">50</span> 💰</div>
+        <button class="btn-boost" onclick="buyUpgrade()">BOOSTER !</button>
     </div>
 
     <script>
         let gold = 0;
-        let level = 1;
-        let goldPerSecond = 0;
+        let gps = 0;
         let cost = 50;
+        let power = 1;
 
-        function updateUI() {
+        function update() {
             document.getElementById('gold').innerText = Math.floor(gold);
-            document.getElementById('gps').innerText = goldPerSecond.toFixed(1);
-            document.getElementById('lvl-text').innerText = "SORCIER LVL " + level;
+            document.getElementById('gps').innerText = gps.toFixed(1);
             document.getElementById('cost').innerText = cost;
-            const btn = document.getElementById('upBtn');
-            btn.style.opacity = (gold < cost) ? "0.5" : "1";
         }
 
-        function clickSorcier() {
-            gold += level;
-            updateUI();
+        function doClick() {
+            gold += power;
+            update();
         }
 
         function buyUpgrade() {
             if (gold >= cost) {
                 gold -= cost;
-                level++;
-                goldPerSecond += 1.5;
-                cost = Math.floor(cost * 1.7);
-                updateUI();
+                gps += 0.5;
+                power += 1;
+                cost = Math.floor(cost * 1.5);
+                update();
             }
         }
 
         setInterval(() => {
-            gold += goldPerSecond;
-            updateUI();
+            gold += gps;
+            update();
         }, 1000);
-
-        updateUI();
     </script>
 </body>
 </html>

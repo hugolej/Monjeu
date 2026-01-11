@@ -2,126 +2,145 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Sorcier Tycoon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>L'ANTRE DES SORCIERS</title>
     <style>
+        /* Style Vieux Parchemin et Magie */
+        :root {
+            --or: #ffcc00; --magie: #bd00ff; --bordure: #5c4033;
+            --fond-menu: rgba(26, 15, 38, 0.95);
+        }
+
         body { 
             margin: 0; 
-            background: #1a0f26 url('IMG_6777.png') no-repeat center center fixed; 
+            background: #000 url('IMG_6777.png') no-repeat center center fixed; 
             background-size: cover;
-            font-family: 'Arial', sans-serif;
-            color: white;
+            font-family: 'Georgia', serif; /* Plus médiéval */
+            color: #f0e68c; 
+            min-height: 100vh;
+        }
+
+        /* Barre de ressources style RPG */
+        header {
+            background: rgba(40, 20, 10, 0.9);
+            border-bottom: 3px solid var(--or);
+            display: flex; justify-content: space-around; padding: 10px;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+        .res-val { color: var(--or); font-weight: bold; font-size: 1.2rem; display: block; }
+        .res-label { font-size: 0.7rem; color: #fff; text-transform: uppercase; }
+
+        /* Grille des Chaudrons / Cuves */
+        main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding-bottom: 100px; }
+
+        .cuve {
+            background: var(--fond-menu);
+            border: 3px solid var(--bordure);
+            border-radius: 15px; padding: 15px;
             text-align: center;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 0 20px rgba(189, 0, 255, 0.2);
         }
 
-        /* Barre du haut style App */
-        .header {
-            background: rgba(0,0,0,0.6);
-            padding: 20px;
-            display: flex;
-            justify-content: space-around;
-            font-size: 1.2rem;
-            backdrop-filter: blur(5px);
+        /* Fenêtre sur ton image (Sorcier/Chaudron) */
+        .sprite-view {
+            width: 100px; height: 100px; margin: 10px auto;
+            overflow: hidden; position: relative;
+            background: rgba(0,0,0,0.5); border: 2px solid var(--or); border-radius: 10px;
         }
-
-        .game-main { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-
-        /* ZOOM SUR LE SORCIER UNIQUEMENT */
-        .sorcier-container {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-            overflow: hidden; /* Cache le reste de la planche */
-            position: relative;
-        }
-        
-        .sorcier-img {
-            width: 240px; /* On double la taille pour zoomer */
+        .sprite-view img {
             position: absolute;
-            top: 0; left: 0; /* On cale sur le premier perso */
-            cursor: pointer;
+            width: 300px; /* Zoom sur ta planche IMG_6778 */
+            top: 0; left: 0; /* Ajustable pour montrer le sorcier ou le chaudron */
         }
 
-        .sorcier-img:active { transform: scale(0.9); }
-
-        /* Interface de bas d'écran */
-        .footer {
-            background: #2a1b3d;
-            padding: 30px;
-            border-top: 4px solid #ffcc00;
-            border-radius: 30px 30px 0 0;
+        .btn-magique {
+            width: 100%; padding: 12px; margin-top: 10px;
+            background: linear-gradient(#5c4033, #2a1b3d);
+            color: var(--or); border: 2px solid var(--or);
+            border-radius: 8px; font-weight: bold; cursor: pointer;
         }
 
-        .btn-boost {
-            background: #76b947;
-            color: white;
-            border: none;
-            padding: 15px 50px;
-            border-radius: 15px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            box-shadow: 0 5px #4d7a2e;
-            width: 80%;
+        /* Menu du bas */
+        nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: #2a1b3d; border-top: 3px solid var(--or);
+            display: flex; justify-content: space-evenly; align-items: center;
         }
+        .nav-btn { background: none; border: none; color: #fff; font-size: 0.8rem; cursor: pointer; }
 
-        .btn-boost:active { transform: translateY(3px); box-shadow: 0 2px #4d7a2e; }
-        
-        .stats-text { margin-bottom: 10px; font-size: 1.1rem; color: #aaa; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal { background: #1a0f26; width: 85%; border: 2px solid var(--or); padding: 20px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div>💰 <span id="gold">0</span></div>
-        <div>⚡ <span id="gps">0.0</span>/s</div>
-    </div>
+<header>
+    <div style="text-align:center"><span class="res-label">💰 PIÈCES D'OR</span><span class="res-val" id="g-v">0</span></div>
+    <div style="text-align:center"><span class="res-label">🔮 MAGIE</span><span class="res-val" id="e-v" style="color:var(--magie)">0</span></div>
+</header>
 
-    <div class="game-main">
-        <div class="sorcier-container" onclick="doClick()">
-            <img src="IMG_6778.png" class="sorcier-img" id="char">
-        </div>
-        <h2 id="lvl-label">SORCIER LVL 1</h2>
-    </div>
+<main id="grid"></main>
 
-    <div class="footer">
-        <div class="stats-text">Améliorer : <span id="cost">50</span> 💰</div>
-        <button class="btn-boost" onclick="buyUpgrade()">BOOSTER !</button>
-    </div>
+<nav>
+    <button class="nav-btn" onclick="openUI('recrutement')">📜 RECRUTER</button>
+    <button class="nav-btn" onclick="openUI('grimoire')">📖 GRIMOIRE</button>
+    <button class="nav-btn" onclick="openUI('donjon')">🏰 DONJON</button>
+</nav>
 
-    <script>
-        let gold = 0;
-        let gps = 0;
-        let cost = 50;
-        let power = 1;
+<div class="overlay" id="overlay">
+    <div class="modal" id="modal-content"></div>
+</div>
 
-        function update() {
-            document.getElementById('gold').innerText = Math.floor(gold);
-            document.getElementById('gps').innerText = gps.toFixed(1);
-            document.getElementById('cost').innerText = cost;
-        }
+<script>
+    let G = { gold: 50, magie: 0, slots: [{ lvl: 1, type: 'sorcier' }] };
 
-        function doClick() {
-            gold += power;
-            update();
-        }
+    function f(n) { return Math.floor(n).toLocaleString(); }
 
-        function buyUpgrade() {
-            if (gold >= cost) {
-                gold -= cost;
-                gps += 0.5;
-                power += 1;
-                cost = Math.floor(cost * 1.5);
-                update();
-            }
-        }
+    function render() {
+        const grid = document.getElementById('grid'); grid.innerHTML = '';
+        G.slots.forEach((s, i) => {
+            const cost = s.lvl * 50;
+            // On décale l'image selon le type (0 pour sorcier, -100px pour chaudron, etc)
+            let offset = s.type === 'sorcier' ? "0px" : "-100px";
+            
+            grid.innerHTML += `
+                <div class="cuve">
+                    <h3 style="color:var(--or)">${s.type.toUpperCase()} LVL ${s.lvl}</h3>
+                    <div class="sprite-view">
+                        <img src="IMG_6778.png" style="left: ${offset}">
+                    </div>
+                    <p>Produit: +${s.lvl * 2} 💰/s</p>
+                    <button class="btn-magique" onclick="upgrade(${i})">AMÉLIORER (${cost} 💰)</button>
+                </div>`;
+        });
+        grid.innerHTML += `<div class="cuve" onclick="addSlot()" style="cursor:pointer; border: 2px dashed var(--or)"><b>+ NOUVEAU CHAUDRON</b></div>`;
+    }
 
-        setInterval(() => {
-            gold += gps;
-            update();
-        }, 1000);
-    </script>
+    function upgrade(i) {
+        let cost = G.slots[i].lvl * 50;
+        if(G.gold >= cost) { G.gold -= cost; G.slots[i].lvl++; render(); }
+    }
+
+    function addSlot() {
+        let cost = G.slots.length * 200;
+        if(G.gold >= cost) { G.gold -= cost; G.slots.push({lvl:1, type:'chaudron'}); render(); }
+    }
+
+    function openUI(t) {
+        document.getElementById('overlay').style.display = 'flex';
+        document.getElementById('modal-content').innerHTML = `<h2>${t.toUpperCase()}</h2><p>Bientôt disponible...</p><button class="btn-magique" onclick="cl()">RETOUR</button>`;
+    }
+
+    function cl() { document.getElementById('overlay').style.display = 'none'; }
+
+    setInterval(() => {
+        G.slots.forEach(s => { G.gold += (s.lvl * 2) / 10; });
+        document.getElementById('g-v').innerText = f(G.gold);
+        document.getElementById('e-v').innerText = f(G.magie);
+    }, 100);
+
+    window.onload = render;
+</script>
 </body>
 </html>

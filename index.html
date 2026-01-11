@@ -3,80 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARCANE LAB | VERSION FINALE</title>
+    <title>ARCANE LAB | FORGE & CHAUDRON</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
        
-        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; }
+        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; --forge: #ff4500; }
 
         body { 
-            margin: 0; padding: 0; 
-            background: #000 url('IMG_6777.png') no-repeat center center fixed; 
-            background-size: cover; 
-            font-family: 'Rajdhani', sans-serif; color: white; height: 100vh; 
-            display: flex; flex-direction: column; overflow: hidden;
+            margin: 0; padding: 0; background: #000 url('IMG_6777.png') no-repeat center center fixed; 
+            background-size: cover; font-family: 'Rajdhani', sans-serif; color: white; 
+            min-height: 100vh; display: flex; flex-direction: column;
+            overflow-y: auto; /* Permet de descendre sur téléphone */
         }
 
-        /* --- HEADER NOIR OPAQUE --- */
-        header { 
-            background: #000000; /* Noir total */
-            border-bottom: 2px solid var(--accent); 
-            display: flex; justify-content: space-around; 
-            padding: 12px 0; z-index: 100; 
-        }
-        .res-block { text-align: center; display: flex; flex-direction: column; align-items: center; width: 33%; }
-        .res-icon { width: 22px; margin-bottom: 2px; }
-        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); }
+        /* --- HEADER NOIR --- */
+        header { background: #000; border-bottom: 2px solid var(--accent); display: flex; justify-content: space-around; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
+        .res-block { text-align: center; width: 30%; }
+        .res-icon { width: 20px; vertical-align: middle; }
+        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); margin-left: 5px; }
 
         /* --- ZONE DE JEU --- */
-        .game-scene { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; }
+        .game-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; }
+        
         .main-character {
-            width: 280px;
-            cursor: pointer;
-            z-index: 5;
-            animation: float 3s infinite ease-in-out;
-            /* Anti-blanc/quadrillage */
-            mix-blend-mode: multiply;
-            filter: contrast(1.3) brightness(1.1);
+            width: 260px; cursor: pointer; animation: float 3s infinite ease-in-out;
+            mix-blend-mode: multiply; filter: contrast(1.3);
         }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* STATS DANS LE CHAUDRON */
+        .chaudron-stats {
+            background: rgba(0,0,0,0.7); border: 1px solid var(--magie); padding: 10px;
+            border-radius: 10px; margin-top: -20px; text-align: center; font-family: 'Orbitron'; font-size: 0.7rem;
+            z-index: 10; pointer-events: none;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
         /* --- INTERFACE BAS --- */
-        .ui-bottom { background: rgba(0, 0, 0, 0.95); border-top: 3px solid var(--accent); padding: 15px; z-index: 20; }
-        .btn-main { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 1rem; color: #000; }
+        .ui-bottom { background: rgba(0, 0, 0, 0.95); border-top: 3px solid var(--accent); padding: 20px; position: sticky; bottom: 0; }
+        .btn-main { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
         
-        nav { display: flex; justify-content: space-around; margin-top: 15px; }
-        .nav-btn { background: none; border: none; color: #fff; font-family: 'Orbitron'; font-size: 0.6rem; cursor: pointer; text-align: center; }
+        nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .nav-btn { background: #111; border: 1px solid #333; color: #fff; padding: 10px 5px; border-radius: 8px; font-size: 0.6rem; font-family: 'Orbitron'; }
 
-        /* --- SYSTÈME DE MENUS (AVEC SCROLL) --- */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal { 
-            background: #000; border: 2px solid var(--accent); 
-            width: 90%; max-height: 80vh; padding: 20px; border-radius: 20px; 
-            overflow-y: auto; /* PERMET LE SCROLL */
-            box-sizing: border-box;
-        }
-        .close-btn { background: var(--accent); color: #000; border: none; padding: 10px; width: 100%; border-radius: 10px; font-family: 'Orbitron'; margin-top: 20px; }
-        
-        .item-card { background: #111; border: 1px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-        .skill-node { border: 2px solid var(--magie); padding: 10px; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 10px auto; }
+        /* --- MODALES --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal { background: #000; border: 2px solid var(--accent); width: 100%; max-height: 80vh; padding: 20px; border-radius: 20px; overflow-y: auto; box-sizing: border-box; }
+        .item-card { background: #111; border: 1px solid #444; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="res-block"><img src="piece.png.png" class="res-icon"><span id="gold-val">0</span></div>
-    <div class="res-block"><img src="cristal.png.png" class="res-icon"><span id="crys-val" style="color:var(--cyan)">0</span></div>
-    <div class="res-block"><img src="potion.png.png" class="res-icon"><span id="magie-val" style="color:var(--magie)">0</span></div>
+    <div class="res-block"><img src="piece.png.png" class="res-icon"><span id="gold-val" class="res-val">0</span></div>
+    <div class="res-block"><img src="cristal.png.png" class="res-icon"><span id="crys-val" class="res-val" style="color:var(--cyan)">0</span></div>
+    <div class="res-block"><img src="potion.png.png" class="res-icon"><span id="magie-val" class="res-val" style="color:var(--magie)">0</span></div>
 </header>
 
 <div class="game-scene">
     <img src="sorcier_chaudron.png.png" class="main-character" onclick="doClick()">
+    <div class="chaudron-stats">
+        <span style="color:var(--accent)">CLIC: +<span id="stat-clic">1</span></span> | 
+        <span style="color:var(--magie)">AUTO: +<span id="stat-auto">0</span>/s</span>
+    </div>
 </div>
 
 <div class="ui-bottom">
     <button class="btn-main" onclick="buyUpgrade()">AMÉLIORER CHAUDRON (<span id="cost">50</span> 💰)</button>
     <nav>
+        <button class="nav-btn" onclick="openMenu('forge')">⚒️<br>FORGE</button>
         <button class="nav-btn" onclick="openMenu('arbre')">🌳<br>ARBRE</button>
         <button class="nav-btn" onclick="openMenu('missions')">🎯<br>MISSIONS</button>
         <button class="nav-btn" onclick="openMenu('recruter')">📜<br>RECRUTER</button>
@@ -88,89 +83,74 @@
     <div class="modal">
         <h2 id="menu-title" style="text-align:center; color:var(--accent); font-family:Orbitron;"></h2>
         <div id="menu-content"></div>
-        <button class="close-btn" onclick="closeMenu()">RETOUR AU LABO</button>
+        <button onclick="closeMenu()" style="width:100%; margin-top:20px; background:var(--accent); border:none; padding:12px; border-radius:10px; font-family:Orbitron;">RETOUR</button>
     </div>
 </div>
 
 <script>
-    // --- DONNÉES DU JEU ---
     let gold = 0, crys = 0, magie = 0, lvl = 1, cost = 50, gps = 0;
-    let missions = [{t: "Premier Bouillon", r: 100, d: "Atteindre 100 Or", c: 100, done: false}];
+    let forgeItems = [{n: "Cuillère en Fer", b: 2, c: 100, type: "clic", owned: false}];
 
     function updateUI() {
         document.getElementById('gold-val').innerText = Math.floor(gold);
         document.getElementById('crys-val').innerText = crys;
         document.getElementById('magie-val').innerText = Math.floor(magie);
         document.getElementById('cost').innerText = cost;
+        document.getElementById('stat-clic').innerText = lvl;
+        document.getElementById('stat-auto').innerText = gps.toFixed(1);
     }
 
-    function doClick() {
-        gold += lvl;
-        magie += 0.5;
-        updateUI();
-    }
+    function doClick() { gold += lvl; magie += 0.5; updateUI(); }
 
     function buyUpgrade() {
         if (gold >= cost) {
-            gold -= cost;
-            lvl++;
-            gps += 2;
-            cost = Math.floor(cost * 1.8);
-            crys += 5;
-            updateUI();
-        } else { alert("Pas assez d'or !"); }
+            gold -= cost; lvl++; gps += 1.5; cost = Math.floor(cost * 1.8); crys += 5; updateUI();
+        }
     }
 
-    // --- MENUS ---
     function openMenu(type) {
         const title = document.getElementById('menu-title');
         const content = document.getElementById('menu-content');
         let html = "";
 
-        if(type === 'arbre') {
-            title.innerText = "ARBRE DE COMPÉTENCES";
-            html = `<div style="text-align:center;">
-                <div class="skill-node">🔮</div><p>Double Magie (50 💎)</p>
-                <div style="height:30px; width:2px; background:var(--magie); margin:0 auto;"></div>
-                <div class="skill-node">🔥</div><p>Feu d'Enfer (150 💎)</p>
-            </div>`;
-        } else if(type === 'missions') {
-            title.innerText = "MISSIONS EN COURS";
-            missions.forEach(m => {
+        if(type === 'forge') {
+            title.innerText = "LA FORGE MAGIQUE";
+            forgeItems.forEach((item, index) => {
                 html += `<div class="item-card">
-                    <div><b>${m.t}</b><br><small>${m.d}</small></div>
-                    <button onclick="checkMission()" style="background:green; color:white; border:none; border-radius:5px; padding:5px;">VALIDER</button>
+                    <div><b>${item.n}</b><br><small>Boost: +${item.b} clic</small></div>
+                    <button onclick="craft(${index})" style="background:var(--forge); color:white; border:none; padding:8px; border-radius:5px;">
+                        ${item.owned ? 'POSSÉDÉ' : item.c + ' 💰'}
+                    </button>
                 </div>`;
             });
+        } else if(type === 'arbre') {
+            title.innerText = "ARBRE DE COMPÉTENCES";
+            html = `<div style="text-align:center;"><p>Débloquez des pouvoirs avec vos cristaux.</p><div style="border:1px solid var(--magie); padding:10px; margin-bottom:10px;">Double Magie (50 💎)</div></div>`;
+        } else if(type === 'missions') {
+            title.innerText = "MISSIONS";
+            html = `<div class="item-card">Recolter 500 Or <button>+50 💎</button></div>`;
         } else if(type === 'recruter') {
-            title.innerText = "RECRUTEMENT";
-            html = `<div class="item-card"><b>Apprenti</b> <span>+10 Or/s</span> <button onclick="buyAuto()">500 💰</button></div>`;
+            title.innerText = "RECRUTER";
+            html = `<div class="item-card">Apprenti (+5 Or/s) <button onclick="gold-=500;gps+=5;updateUI();">500 💰</button></div>`;
         } else if(type === 'donjon') {
             title.innerText = "DONJON";
-            html = `<div style="text-align:center; color:red;"><h3>BOSS : DRAGON NOIR</h3><p>PV: 1000/1000</p><button class="btn-main" style="background:red; color:white;">ATTAQUER</button></div>`;
+            html = `<div style="text-align:center; color:red;"><h3>BOSS : GOLEM</h3><button class="btn-main" style="background:red; color:white;">COMBATTRE</button></div>`;
         }
 
         content.innerHTML = html;
         document.getElementById('menu-overlay').style.display = 'flex';
     }
 
-    function buyAuto() {
-        if(gold >= 500) { gold -= 500; gps += 10; updateUI(); closeMenu(); }
-    }
-
-    function checkMission() {
-        if(gold >= 100) { alert("Mission Réussie ! +50 Cristaux"); crys += 50; updateUI(); }
-        else { alert("Pas encore fini !"); }
+    function craft(index) {
+        let item = forgeItems[index];
+        if(!item.owned && gold >= item.c) {
+            gold -= item.c; item.owned = true; lvl += item.b; updateUI(); openMenu('forge');
+        }
     }
 
     function closeMenu() { document.getElementById('menu-overlay').style.display = 'none'; }
 
-    // Revenus passifs (Production Or/sec)
-    setInterval(() => {
-        gold += gps / 10;
-        updateUI();
-    }, 100);
-
+    setInterval(() => { gold += gps / 10; updateUI(); }, 100);
     updateUI();
 </script>
 </body>

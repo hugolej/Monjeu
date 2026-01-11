@@ -3,53 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARCANE LAB | FORGE & CHAUDRON</title>
+    <title>ARCANE LAB | FULL VERSION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
        
-        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; --forge: #ff4500; }
+        :root { --accent: #ffcc00; --magie: #bd00ff; --cyan: #00f2ff; --rouge: #ff4444; }
 
         body { 
             margin: 0; padding: 0; background: #000 url('IMG_6777.png') no-repeat center center fixed; 
             background-size: cover; font-family: 'Rajdhani', sans-serif; color: white; 
-            min-height: 100vh; display: flex; flex-direction: column;
-            overflow-y: auto; /* Permet de descendre sur téléphone */
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden;
         }
 
-        /* --- HEADER NOIR --- */
+        /* --- HEADER NOIR OPAQUE --- */
         header { background: #000; border-bottom: 2px solid var(--accent); display: flex; justify-content: space-around; padding: 15px 0; position: sticky; top: 0; z-index: 100; }
         .res-block { text-align: center; width: 30%; }
         .res-icon { width: 20px; vertical-align: middle; }
-        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); margin-left: 5px; }
+        .res-val { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--accent); }
 
         /* --- ZONE DE JEU --- */
-        .game-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; }
-        
+        .game-scene { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 0; }
         .main-character {
-            width: 260px; cursor: pointer; animation: float 3s infinite ease-in-out;
+            width: 250px; cursor: pointer; animation: float 3s infinite ease-in-out;
             mix-blend-mode: multiply; filter: contrast(1.3);
         }
-
-        /* STATS DANS LE CHAUDRON */
         .chaudron-stats {
-            background: rgba(0,0,0,0.7); border: 1px solid var(--magie); padding: 10px;
-            border-radius: 10px; margin-top: -20px; text-align: center; font-family: 'Orbitron'; font-size: 0.7rem;
-            z-index: 10; pointer-events: none;
+            background: rgba(0,0,0,0.8); border: 1px solid var(--magie); padding: 12px;
+            border-radius: 10px; margin-top: -10px; text-align: center; font-family: 'Orbitron'; font-size: 0.7rem;
+            z-index: 10; box-shadow: 0 0 15px var(--magie);
         }
-
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* --- INTERFACE BAS --- */
-        .ui-bottom { background: rgba(0, 0, 0, 0.95); border-top: 3px solid var(--accent); padding: 20px; position: sticky; bottom: 0; }
-        .btn-main { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
+        /* --- NAVIGATION --- */
+        .ui-bottom { background: rgba(0, 0, 0, 0.95); border-top: 3px solid var(--accent); padding: 15px; position: sticky; bottom: 0; z-index: 100; }
+        .btn-ameliorer { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 12px; font-family: 'Orbitron'; font-weight: bold; font-size: 0.9rem; margin-bottom: 12px; color: #000; }
         
-        nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        .nav-btn { background: #111; border: 1px solid #333; color: #fff; padding: 10px 5px; border-radius: 8px; font-size: 0.6rem; font-family: 'Orbitron'; }
+        nav { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+        .nav-btn { background: #111; border: 1px solid #333; color: #fff; padding: 8px 2px; border-radius: 8px; font-size: 0.55rem; font-family: 'Orbitron'; cursor: pointer; }
 
-        /* --- MODALES --- */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
-        .modal { background: #000; border: 2px solid var(--accent); width: 100%; max-height: 80vh; padding: 20px; border-radius: 20px; overflow-y: auto; box-sizing: border-box; }
+        /* --- MODALES & SCROLL --- */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal { background: #000; border: 2px solid var(--accent); width: 100%; max-height: 85vh; padding: 20px; border-radius: 20px; overflow-y: auto; box-sizing: border-box; }
+        .close-btn { width: 100%; margin-top: 15px; background: var(--accent); border: none; padding: 12px; border-radius: 10px; font-family: 'Orbitron'; font-weight: bold; }
+
+        /* ÉLÉMENTS DE MENU */
         .item-card { background: #111; border: 1px solid #444; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .skill-node { width: 60px; height: 60px; border: 2px solid var(--magie); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 10px auto; background: #1a0a2a; }
     </style>
 </head>
 <body>
@@ -63,33 +62,36 @@
 <div class="game-scene">
     <img src="sorcier_chaudron.png.png" class="main-character" onclick="doClick()">
     <div class="chaudron-stats">
-        <span style="color:var(--accent)">CLIC: +<span id="stat-clic">1</span></span> | 
-        <span style="color:var(--magie)">AUTO: +<span id="stat-auto">0</span>/s</span>
+        <span style="color:var(--accent)">CLIC: +<span id="stat-clic">1</span></span><br>
+        <span style="color:var(--magie)">PRODUCTION: +<span id="stat-auto">0</span>/s</span>
     </div>
 </div>
 
 <div class="ui-bottom">
-    <button class="btn-main" onclick="buyUpgrade()">AMÉLIORER CHAUDRON (<span id="cost">50</span> 💰)</button>
+    <button class="btn-ameliorer" onclick="buyUpgrade()">AMÉLIORER CHAUDRON (<span id="cost">50</span> 💰)</button>
     <nav>
         <button class="nav-btn" onclick="openMenu('forge')">⚒️<br>FORGE</button>
         <button class="nav-btn" onclick="openMenu('arbre')">🌳<br>ARBRE</button>
-        <button class="nav-btn" onclick="openMenu('missions')">🎯<br>MISSIONS</button>
-        <button class="nav-btn" onclick="openMenu('recruter')">📜<br>RECRUTER</button>
+        <button class="nav-btn" onclick="openMenu('missions')">🎯<br>MISS.</button>
+        <button class="nav-btn" onclick="openMenu('recruter')">📜<br>RECRUT.</button>
         <button class="nav-btn" onclick="openMenu('donjon')">🏰<br>DONJON</button>
     </nav>
 </div>
 
 <div class="overlay" id="menu-overlay">
     <div class="modal">
-        <h2 id="menu-title" style="text-align:center; color:var(--accent); font-family:Orbitron;"></h2>
+        <h2 id="menu-title" style="text-align:center; color:var(--accent); font-family:Orbitron; margin-top:0;"></h2>
         <div id="menu-content"></div>
-        <button onclick="closeMenu()" style="width:100%; margin-top:20px; background:var(--accent); border:none; padding:12px; border-radius:10px; font-family:Orbitron;">RETOUR</button>
+        <button class="close-btn" onclick="closeMenu()">RETOUR</button>
     </div>
 </div>
 
 <script>
+    // --- VARIABLES D'ÉTAT ---
     let gold = 0, crys = 0, magie = 0, lvl = 1, cost = 50, gps = 0;
-    let forgeItems = [{n: "Cuillère en Fer", b: 2, c: 100, type: "clic", owned: false}];
+    let bossHP = 1000;
+    let missions = [{id: 0, t: "Apprenti Alchimiste", d: "Avoir 500 Or", goal: 500, rew: 50, done: false}];
+    let forgeItems = [{n: "Louche en Argent", b: 3, c: 200, owned: false}];
 
     function updateUI() {
         document.getElementById('gold-val').innerText = Math.floor(gold);
@@ -104,49 +106,52 @@
 
     function buyUpgrade() {
         if (gold >= cost) {
-            gold -= cost; lvl++; gps += 1.5; cost = Math.floor(cost * 1.8); crys += 5; updateUI();
+            gold -= cost; lvl++; gps += 2; cost = Math.floor(cost * 1.8); crys += 10; updateUI();
         }
     }
 
+    // --- MENUS ---
     function openMenu(type) {
         const title = document.getElementById('menu-title');
         const content = document.getElementById('menu-content');
         let html = "";
 
         if(type === 'forge') {
-            title.innerText = "LA FORGE MAGIQUE";
-            forgeItems.forEach((item, index) => {
-                html += `<div class="item-card">
-                    <div><b>${item.n}</b><br><small>Boost: +${item.b} clic</small></div>
-                    <button onclick="craft(${index})" style="background:var(--forge); color:white; border:none; padding:8px; border-radius:5px;">
-                        ${item.owned ? 'POSSÉDÉ' : item.c + ' 💰'}
-                    </button>
-                </div>`;
+            title.innerText = "FORGE MAGIQUE";
+            forgeItems.forEach((item, i) => {
+                html += `<div class="item-card"><div><b>${item.n}</b><br><small>+${item.b} au clic</small></div><button onclick="buyForge(${i})" style="background:orange; border:none; padding:8px; border-radius:5px;">${item.owned ? 'OK' : item.c+'💰'}</button></div>`;
             });
         } else if(type === 'arbre') {
             title.innerText = "ARBRE DE COMPÉTENCES";
-            html = `<div style="text-align:center;"><p>Débloquez des pouvoirs avec vos cristaux.</p><div style="border:1px solid var(--magie); padding:10px; margin-bottom:10px;">Double Magie (50 💎)</div></div>`;
+            html = `<div style="text-align:center;"><div class="skill-node">💎</div><p>Sagesse (Gain Or x2)<br><button onclick="buyArbre(100)">100 💎</button></p></div>`;
         } else if(type === 'missions') {
-            title.innerText = "MISSIONS";
-            html = `<div class="item-card">Recolter 500 Or <button>+50 💎</button></div>`;
+            title.innerText = "TABLEAU DES MISSIONS";
+            missions.forEach(m => {
+                html += `<div class="item-card"><div><b>${m.t}</b><br><small>${m.d}</small></div><button onclick="validMission(${m.id})" style="background:green; color:white; border:none; padding:8px; border-radius:5px;">VALIDER</button></div>`;
+            });
         } else if(type === 'recruter') {
-            title.innerText = "RECRUTER";
-            html = `<div class="item-card">Apprenti (+5 Or/s) <button onclick="gold-=500;gps+=5;updateUI();">500 💰</button></div>`;
+            title.innerText = "RECRUTEMENT";
+            html = `<div class="item-card"><div><b>Petit Gobelin</b><br><small>+10 or/sec</small></div><button onclick="buyRecrut(800)" style="background:var(--accent); border:none; padding:8px; border-radius:5px;">800 💰</button></div>`;
         } else if(type === 'donjon') {
-            title.innerText = "DONJON";
-            html = `<div style="text-align:center; color:red;"><h3>BOSS : GOLEM</h3><button class="btn-main" style="background:red; color:white;">COMBATTRE</button></div>`;
+            title.innerText = "DONJON DU BOSS";
+            html = `<div style="text-align:center; color:var(--rouge);"><h3>DRAGON DE FEU</h3><p>PV : ${bossHP} / 1000</p><button class="btn-ameliorer" style="background:var(--rouge); color:white;" onclick="attackBoss()">ATTAQUER !</button></div>`;
         }
 
         content.innerHTML = html;
         document.getElementById('menu-overlay').style.display = 'flex';
     }
 
-    function craft(index) {
-        let item = forgeItems[index];
-        if(!item.owned && gold >= item.c) {
-            gold -= item.c; item.owned = true; lvl += item.b; updateUI(); openMenu('forge');
-        }
+    // --- LOGIQUE ACTIONS ---
+    function buyForge(i) {
+        if(!forgeItems[i].owned && gold >= forgeItems[i].c) { gold -= forgeItems[i].c; forgeItems[i].owned = true; lvl += forgeItems[i].b; updateUI(); openMenu('forge'); }
     }
+    function buyArbre(c) { if(crys >= c) { crys -= c; lvl *= 2; updateUI(); closeMenu(); } }
+    function buyRecrut(c) { if(gold >= c) { gold -= c; gps += 10; updateUI(); closeMenu(); } }
+    function validMission(id) {
+        let m = missions[id];
+        if(!m.done && gold >= m.goal) { m.done = true; crys += m.rew; alert("Bravo ! +"+m.rew+" Cristaux"); updateUI(); openMenu('missions'); }
+    }
+    function attackBoss() { bossHP -= lvl * 2; if(bossHP <= 0) { alert("Boss vaincu !"); crys += 500; bossHP = 1000; } openMenu('donjon'); }
 
     function closeMenu() { document.getElementById('menu-overlay').style.display = 'none'; }
 

@@ -5,39 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SORCIER TYCOON</title>
     <style>
+        /* CSS : Le look de ton jeu */
         body { 
             margin: 0; 
-            /* ICI : J'ai mis ton image IMG_6777 pour le fond */
             background: #1a0f26 url('IMG_6777.png') no-repeat center center fixed; 
             background-size: cover;
             font-family: sans-serif;
             color: white;
             text-align: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .top-bar {
             background: rgba(0, 0, 0, 0.8);
             padding: 15px;
-            border-bottom: 4px solid #ffcc00;
             display: flex;
             justify-content: space-around;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            border-bottom: 3px solid #ffcc00;
         }
 
         .game-area {
-            height: 60vh;
+            height: 50vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        /* ICI : J'ai mis ton image IMG_6778 pour le sorcier */
         .sorcier {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             background: url('IMG_6778.png') no-repeat center;
             background-size: contain;
+            cursor: pointer;
             animation: levitation 3s infinite ease-in-out;
         }
 
@@ -47,40 +49,43 @@
         }
 
         .upgrade-section {
-            background: rgba(45, 27, 66, 0.95);
             position: fixed;
             bottom: 0;
             width: 100%;
-            padding: 20px 0;
+            padding: 25px 0;
+            background: rgba(0,0,0,0.85);
             border-top: 3px solid #ffcc00;
         }
 
         .btn-upgrade {
             background: #4CAF50;
             color: white;
+            padding: 15px 40px;
             border: none;
-            padding: 15px 30px;
             border-radius: 12px;
             font-weight: bold;
-            box-shadow: 0 5px #2e7d32;
+            font-size: 1.1rem;
+            box-shadow: 0 4px #2e7d32;
         }
+
+        .cost-text { margin-bottom: 8px; color: #ffcc00; }
     </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <div>💰 <span id="gold">0</span></div>
+        <div>💰 OR: <span id="gold">0</span></div>
         <div>⚡ <span id="gps">0</span>/s</div>
     </div>
 
     <div class="game-area">
         <div class="sorcier" onclick="clickSorcier()"></div>
-        <h2>SORCIER LVL <span id="lvl">1</span></h2>
+        <h2 id="lvl-text">SORCIER (LVL 1)</h2>
     </div>
 
     <div class="upgrade-section">
-        <p>Améliorer : <span id="cost">50</span> 💰</p>
-        <button class="btn-upgrade" onclick="buyUpgrade()">BOOSTER !</button>
+        <div class="cost-text">Amélioration : <span id="cost">50</span> 💰</div>
+        <button class="btn-upgrade" id="upBtn" onclick="buyUpgrade()">BOOSTER !</button>
     </div>
 
     <script>
@@ -92,8 +97,10 @@
         function updateUI() {
             document.getElementById('gold').innerText = Math.floor(gold);
             document.getElementById('gps').innerText = goldPerSecond.toFixed(1);
-            document.getElementById('lvl').innerText = level;
+            document.getElementById('lvl-text').innerText = "SORCIER LVL " + level;
             document.getElementById('cost').innerText = cost;
+            const btn = document.getElementById('upBtn');
+            btn.style.opacity = (gold < cost) ? "0.5" : "1";
         }
 
         function clickSorcier() {
@@ -105,8 +112,8 @@
             if (gold >= cost) {
                 gold -= cost;
                 level++;
-                goldPerSecond += 1;
-                cost = Math.floor(cost * 1.5);
+                goldPerSecond += 1.5;
+                cost = Math.floor(cost * 1.7);
                 updateUI();
             }
         }

@@ -3,144 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>L'ANTRE DES SORCIERS</title>
+    <title>ARCANE LAB | MEDIEVAL</title>
     <style>
-        /* Style Vieux Parchemin et Magie */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap');
+       
         :root {
-            --or: #ffcc00; --magie: #bd00ff; --bordure: #5c4033;
-            --fond-menu: rgba(26, 15, 38, 0.95);
+            --accent: #ffcc00; --magie: #bd00ff; --fond: rgba(20, 10, 30, 0.9);
         }
 
         body { 
-            margin: 0; 
+            margin: 0; padding: 0;
             background: #000 url('IMG_6777.png') no-repeat center center fixed; 
             background-size: cover;
-            font-family: 'Georgia', serif; /* Plus médiéval */
-            color: #f0e68c; 
-            min-height: 100vh;
+            font-family: 'Rajdhani', sans-serif;
+            color: white; height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
         }
 
-        /* Barre de ressources style RPG */
+        /* --- HEADER : TES RESSOURCES --- */
         header {
-            background: rgba(40, 20, 10, 0.9);
-            border-bottom: 3px solid var(--or);
-            display: flex; justify-content: space-around; padding: 10px;
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.8); border-bottom: 2px solid var(--accent);
+            display: flex; justify-content: space-around; padding: 10px; z-index: 100;
         }
-        .res-val { color: var(--or); font-weight: bold; font-size: 1.2rem; display: block; }
-        .res-label { font-size: 0.7rem; color: #fff; text-transform: uppercase; }
+        .res-block { text-align: center; }
+        .res-val { font-family: 'Orbitron'; font-size: 1.1rem; color: var(--accent); display: block; }
+        .res-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Grille des Chaudrons / Cuves */
-        main { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding-bottom: 100px; }
-
-        .cuve {
-            background: var(--fond-menu);
-            border: 3px solid var(--bordure);
-            border-radius: 15px; padding: 15px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(189, 0, 255, 0.2);
+        /* --- ZONE DE JEU : SORCIER + CHAUDRON --- */
+        .game-scene {
+            flex: 1; position: relative;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        /* Fenêtre sur ton image (Sorcier/Chaudron) */
-        .sprite-view {
-            width: 100px; height: 100px; margin: 10px auto;
-            overflow: hidden; position: relative;
-            background: rgba(0,0,0,0.5); border: 2px solid var(--or); border-radius: 10px;
-        }
-        .sprite-view img {
-            position: absolute;
-            width: 300px; /* Zoom sur ta planche IMG_6778 */
-            top: 0; left: 0; /* Ajustable pour montrer le sorcier ou le chaudron */
-        }
-
-        .btn-magique {
-            width: 100%; padding: 12px; margin-top: 10px;
-            background: linear-gradient(#5c4033, #2a1b3d);
-            color: var(--or); border: 2px solid var(--or);
-            border-radius: 8px; font-weight: bold; cursor: pointer;
+        /* LE SORCIER (Derrière) */
+        .sorcier-view {
+            width: 200px; height: 200px;
+            position: absolute; top: 20%;
+            background: url('IMG_6778.png') no-repeat;
+            background-size: 600px; /* On zoome sur la planche */
+            background-position: 0 0; /* Position du sorcier */
+            animation: float 3s infinite ease-in-out;
+            z-index: 1;
         }
 
-        /* Menu du bas */
+        /* LE CHAUDRON (Devant) */
+        .chaudron-view {
+            width: 120px; height: 120px;
+            position: absolute; bottom: 25%;
+            background: url('IMG_6778.png') no-repeat;
+            background-size: 360px; /* On zoome différemment */
+            background-position: -120px 0; /* Position du chaudron sur ton image */
+            z-index: 2;
+            cursor: pointer;
+            filter: drop-shadow(0 0 15px var(--magie));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- FOOTER : ACTIONS & MENU --- */
+        .ui-bottom {
+            background: var(--fond); border-top: 3px solid var(--accent);
+            padding: 20px; border-radius: 20px 20px 0 0;
+        }
+
+        .btn-upgrade {
+            width: 100%; padding: 15px; background: var(--accent); color: black;
+            border: none; border-radius: 10px; font-family: 'Orbitron';
+            font-weight: bold; font-size: 1rem; cursor: pointer;
+        }
+
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: #2a1b3d; border-top: 3px solid var(--or);
-            display: flex; justify-content: space-evenly; align-items: center;
+            display: flex; justify-content: space-around; margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;
         }
-        .nav-btn { background: none; border: none; color: #fff; font-size: 0.8rem; cursor: pointer; }
+        .nav-btn { background: none; border: none; color: #aaa; font-size: 0.7rem; cursor: pointer; font-family: 'Orbitron'; }
+        .nav-btn:hover { color: var(--accent); }
 
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal { background: #1a0f26; width: 85%; border: 2px solid var(--or); padding: 20px; border-radius: 15px; }
+        /* MODAL */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: #1a0a2a; border: 2px solid var(--accent); width: 85%; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="text-align:center"><span class="res-label">💰 PIÈCES D'OR</span><span class="res-val" id="g-v">0</span></div>
-    <div style="text-align:center"><span class="res-label">🔮 MAGIE</span><span class="res-val" id="e-v" style="color:var(--magie)">0</span></div>
+    <div class="res-block"><span class="res-label">OR</span><span class="res-val" id="gold-val">0</span></div>
+    <div class="res-block"><span class="res-label">CRISTAUX</span><span class="res-val" id="crys-val" style="color:#00f2ff">0</span></div>
+    <div class="res-block"><span class="res-label">MAGIE</span><span class="res-val" id="magie-val" style="color:var(--magie)">0</span></div>
 </header>
 
-<main id="grid"></main>
+<div class="game-scene">
+    <div class="sorcier-view"></div>
+    <div class="chaudron-view" onclick="doClick()"></div>
+</div>
 
-<nav>
-    <button class="nav-btn" onclick="openUI('recrutement')">📜 RECRUTER</button>
-    <button class="nav-btn" onclick="openUI('grimoire')">📖 GRIMOIRE</button>
-    <button class="nav-btn" onclick="openUI('donjon')">🏰 DONJON</button>
-</nav>
+<div class="ui-bottom">
+    <div style="text-align:center; margin-bottom:10px;">
+        <span style="color:var(--accent)">CHAUDRON LVL <span id="lvl">1</span></span><br>
+        <small>Produit: <span id="gps">2</span> or/s</small>
+    </div>
+    <button class="btn-upgrade" onclick="buyUpgrade()">AMÉLIORER (<span id="cost">50</span> 💰)</button>
+    
+    <nav>
+        <button class="nav-btn" onclick="openUI('Recrutement')">RECRUTER</button>
+        <button class="nav-btn" onclick="openUI('Grimoire')">GRIMOIRE</button>
+        <button class="nav-btn" onclick="openUI('Donjon')">DONJON</button>
+    </nav>
+</div>
 
 <div class="overlay" id="overlay">
-    <div class="modal" id="modal-content"></div>
+    <div class="modal">
+        <h2 id="modal-title" style="color:var(--accent)">TITRE</h2>
+        <p>Contenu en cours de développement...</p>
+        <button class="btn-upgrade" onclick="closeUI()">RETOUR</button>
+    </div>
 </div>
 
 <script>
-    let G = { gold: 50, magie: 0, slots: [{ lvl: 1, type: 'sorcier' }] };
+    // État du jeu (Toutes tes fonctionnalités)
+    let state = {
+        gold: 0, crys: 0, magie: 0,
+        lvl: 1, cost: 50, gps: 2
+    };
 
-    function f(n) { return Math.floor(n).toLocaleString(); }
-
-    function render() {
-        const grid = document.getElementById('grid'); grid.innerHTML = '';
-        G.slots.forEach((s, i) => {
-            const cost = s.lvl * 50;
-            // On décale l'image selon le type (0 pour sorcier, -100px pour chaudron, etc)
-            let offset = s.type === 'sorcier' ? "0px" : "-100px";
-            
-            grid.innerHTML += `
-                <div class="cuve">
-                    <h3 style="color:var(--or)">${s.type.toUpperCase()} LVL ${s.lvl}</h3>
-                    <div class="sprite-view">
-                        <img src="IMG_6778.png" style="left: ${offset}">
-                    </div>
-                    <p>Produit: +${s.lvl * 2} 💰/s</p>
-                    <button class="btn-magique" onclick="upgrade(${i})">AMÉLIORER (${cost} 💰)</button>
-                </div>`;
-        });
-        grid.innerHTML += `<div class="cuve" onclick="addSlot()" style="cursor:pointer; border: 2px dashed var(--or)"><b>+ NOUVEAU CHAUDRON</b></div>`;
+    function updateUI() {
+        document.getElementById('gold-val').innerText = Math.floor(state.gold);
+        document.getElementById('crys-val').innerText = state.crys;
+        document.getElementById('magie-val').innerText = Math.floor(state.magie);
+        document.getElementById('lvl').innerText = state.lvl;
+        document.getElementById('cost').innerText = state.cost;
+        document.getElementById('gps').innerText = state.gps;
     }
 
-    function upgrade(i) {
-        let cost = G.slots[i].lvl * 50;
-        if(G.gold >= cost) { G.gold -= cost; G.slots[i].lvl++; render(); }
+    function doClick() {
+        state.gold += state.lvl;
+        state.magie += 0.1; // Cliquer produit un peu de magie
+        updateUI();
     }
 
-    function addSlot() {
-        let cost = G.slots.length * 200;
-        if(G.gold >= cost) { G.gold -= cost; G.slots.push({lvl:1, type:'chaudron'}); render(); }
+    function buyUpgrade() {
+        if (state.gold >= state.cost) {
+            state.gold -= state.cost;
+            state.lvl++;
+            state.gps += 2;
+            state.cost = Math.floor(state.cost * 1.6);
+            state.crys += 5; // On gagne des cristaux en montant de niveau
+            updateUI();
+        }
     }
 
-    function openUI(t) {
+    function openUI(name) {
+        document.getElementById('modal-title').innerText = name;
         document.getElementById('overlay').style.display = 'flex';
-        document.getElementById('modal-content').innerHTML = `<h2>${t.toUpperCase()}</h2><p>Bientôt disponible...</p><button class="btn-magique" onclick="cl()">RETOUR</button>`;
     }
 
-    function cl() { document.getElementById('overlay').style.display = 'none'; }
+    function closeUI() {
+        document.getElementById('overlay').style.display = 'none';
+    }
 
+    // Gain automatique (Or et Magie)
     setInterval(() => {
-        G.slots.forEach(s => { G.gold += (s.lvl * 2) / 10; });
-        document.getElementById('g-v').innerText = f(G.gold);
-        document.getElementById('e-v').innerText = f(G.magie);
+        state.gold += state.gps / 10;
+        state.magie += (state.lvl * 0.05);
+        updateUI();
     }, 100);
 
-    window.onload = render;
+    window.onload = updateUI;
 </script>
+
 </body>
 </html>
